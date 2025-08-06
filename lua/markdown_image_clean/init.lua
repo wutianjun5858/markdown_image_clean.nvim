@@ -12,8 +12,11 @@ local function get_markdown_files()
   local cwd = vim.fn.getcwd()
   local md_files = {}
   
-  -- 使用 vim.fn.glob 查找 .md 文件
-  local files = vim.fn.glob(cwd .. '/*.md', false, true)
+  -- 使用当前缓冲区文件所在目录查找 .md 文件
+  local current_file = vim.api.nvim_buf_get_name(0)
+  local current_dir = vim.fn.fnamemodify(current_file, ":h")
+  print(current_dir)
+  local files = vim.fn.glob(current_dir .. '/*.md', false, true)
   
   for _, file in ipairs(files) do
     table.insert(md_files, file)
@@ -82,10 +85,11 @@ end
 function M.analyze_images(image_dir)
   local cfg = config.get()
   image_dir = image_dir or cfg.default_image_dir
+  print("jun的image_dir="..image_dir)
   
   -- 转换为绝对路径
   if not vim.startswith(image_dir, '/') then
-    image_dir = vim.fn.getcwd() .. '/' .. image_dir
+    image_dir = vim.fn.expand('%:p:h') .. '/' .. image_dir
   end
   
   if cfg.verbose then

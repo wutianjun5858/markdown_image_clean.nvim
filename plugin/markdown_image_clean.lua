@@ -16,7 +16,8 @@ end, {
 })
 
 vim.api.nvim_create_user_command('MarkdownImageAnalyze', function(opts)
-  require('markdown_image_clean').analyze_images(opts.args)
+  local dir = opts.args and opts.args ~= "" and opts.args or nil
+  require('markdown_image_clean').analyze_images(dir)
 end, {
   nargs = '?',
   desc = '分析 Markdown 文件中的图片引用情况',

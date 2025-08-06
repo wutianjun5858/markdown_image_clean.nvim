@@ -34,7 +34,7 @@ M.defaults = {
 }
 
 -- 当前配置
-M.options = {}
+M.options = nil  -- 先设为 nil
 
 -- 初始化配置
 function M.setup(opts)
@@ -65,7 +65,30 @@ end
 
 -- 获取配置
 function M.get()
+  -- 如果 setup 从未被调用，返回默认配置
+  if M.options == nil then
+    return M.defaults
+  end
   return M.options
+end
+
+-- 分析图片引用情况
+function M.analyze_images(image_dir)
+  -- 调试信息
+  print("=== 配置调试 ===")
+  local cfg = config.get()
+  print("config模块状态:", cfg and "存在" or "不存在")
+  if cfg then
+    print("cfg内容:", vim.inspect(cfg))
+    print("default_image_dir:", cfg.default_image_dir)
+  else
+    print("配置获取失败!")
+  end
+  print("传入参数 image_dir:", image_dir)
+  print("===============")
+  
+  image_dir = image_dir or (cfg and cfg.default_image_dir) or 'imgs'  -- 添加兜底值
+  print("最终使用的 image_dir:", image_dir)
 end
 
 return M
