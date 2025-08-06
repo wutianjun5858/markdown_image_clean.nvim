@@ -1,0 +1,71 @@
+-- markdown_image_clean.nvim 配置模块
+local M = {}
+
+-- 默认配置选项
+M.defaults = {
+  -- 默认图片目录
+  default_image_dir = 'imgs',
+  
+  -- 是否显示详细信息
+  verbose = true,
+  
+  -- 支持的图片文件扩展名
+  image_extensions = { 'png', 'jpg', 'jpeg', 'gif', 'svg', 'webp', 'bmp', 'tiff' },
+  
+  -- 是否在删除前确认
+  confirm_delete = true,
+  
+  -- 键映射配置
+  keymaps = {
+    -- 分析图片引用
+    analyze = '<leader>mia',
+    -- 清理未引用的图片
+    clean = '<leader>mic',
+  },
+  
+  -- 是否启用默认键映射
+  enable_default_keymaps = true,
+  
+  -- 删除文件时是否显示进度
+  show_progress = true,
+  
+  -- 是否在分析后自动显示结果窗口
+  auto_show_results = true,
+}
+
+-- 当前配置
+M.options = {}
+
+-- 初始化配置
+function M.setup(opts)
+  M.options = vim.tbl_deep_extend('force', M.defaults, opts or {})
+  
+  -- 设置默认键映射
+  if M.options.enable_default_keymaps then
+    M.setup_keymaps()
+  end
+end
+
+-- 设置键映射
+function M.setup_keymaps()
+  local opts = { noremap = true, silent = true }
+  
+  if M.options.keymaps.analyze then
+    vim.keymap.set('n', M.options.keymaps.analyze, function()
+      require('markdown_image_clean').analyze_images()
+    end, vim.tbl_extend('force', opts, { desc = '分析 Markdown 图片引用' }))
+  end
+  
+  if M.options.keymaps.clean then
+    vim.keymap.set('n', M.options.keymaps.clean, function()
+      require('markdown_image_clean').clean_images()
+    end, vim.tbl_extend('force', opts, { desc = '清理未引用的图片' }))
+  end
+end
+
+-- 获取配置
+function M.get()
+  return M.options
+end
+
+return M

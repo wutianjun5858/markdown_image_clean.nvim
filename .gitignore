@@ -1,0 +1,19 @@
+# Neovim 插件开发相关文件
+*.swp
+*.swo
+*~
+
+# 测试文件
+test/
+spec/
+
+# 文档生成
+doc/tags
+
+# 编辑器配置
+.vscode/
+.idea/
+
+# 系统文件
+.DS_Store
+Thumbs.db

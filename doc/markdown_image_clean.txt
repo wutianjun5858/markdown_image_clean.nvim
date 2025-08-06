@@ -1,0 +1,175 @@
+*markdown_image_clean.txt*    清理 Markdown 文件中未引用的图片
+
+作者: Your Name
+许可证: MIT
+
+==============================================================================
+目录                                         *markdown_image_clean-contents*
+
+1. 介绍 ................................. |markdown_image_clean-introduction|
+2. 安装 ................................. |markdown_image_clean-installation|
+3. 配置 ................................. |markdown_image_clean-configuration|
+4. 命令 ................................. |markdown_image_clean-commands|
+5. 函数 ................................. |markdown_image_clean-functions|
+6. 键映射 ............................... |markdown_image_clean-keymaps|
+
+==============================================================================
+1. 介绍                              *markdown_image_clean-introduction*
+
+markdown_image_clean.nvim 是一个用于清理 Markdown 文件中未引用图片的 
+Neovim 插件。它可以扫描当前目录下的所有 Markdown 文件，找出未被引用的
+图片文件并提供删除功能。
+
+功能特性:
+- 智能分析 Markdown 文件中的图片引用
+- 安全清理未引用的图片文件
+- 灵活的配置选项
+- 便捷的键盘映射
+- 支持多种图片格式
+
+==============================================================================
+2. 安装                              *markdown_image_clean-installation*
+
+使用 lazy.nvim:
+>lua
+    {
+      'your-username/markdown_image_clean.nvim',
+      config = function()
+        require('markdown_image_clean').setup()
+      end,
+    }
+<
+
+使用 packer.nvim:
+>lua
+    use {
+      'your-username/markdown_image_clean.nvim',
+      config = function()
+        require('markdown_image_clean').setup()
+      end
+    }
+<
+
+==============================================================================
+3. 配置                              *markdown_image_clean-configuration*
+
+*markdown_image_clean.setup()*
+
+设置插件配置。传入一个包含配置选项的表。
+
+参数:
+  {opts} (table|nil): 配置选项表
+
+示例:
+>lua
+    require('markdown_image_clean').setup({
+      default_image_dir = 'assets/images',
+      verbose = true,
+      confirm_delete = true,
+    })
+<
+
+配置选项:
+
+*markdown_image_clean.config.default_image_dir*
+类型: string
+默认值: 'imgs'
+描述: 默认的图片目录路径
+
+*markdown_image_clean.config.verbose*
+类型: boolean  
+默认值: true
+描述: 是否显示详细的分析信息
+
+*markdown_image_clean.config.image_extensions*
+类型: table
+默认值: { 'png', 'jpg', 'jpeg', 'gif', 'svg', 'webp', 'bmp', 'tiff' }
+描述: 支持的图片文件扩展名列表
+
+*markdown_image_clean.config.confirm_delete*
+类型: boolean
+默认值: true  
+描述: 删除文件前是否需要用户确认
+
+*markdown_image_clean.config.keymaps*
+类型: table
+默认值: { analyze = '<leader>mia', clean = '<leader>mic' }
+描述: 键映射配置
+
+*markdown_image_clean.config.enable_default_keymaps*
+类型: boolean
+默认值: true
+描述: 是否启用默认键映射
+
+==============================================================================
+4. 命令                                  *markdown_image_clean-commands*
+
+*:MarkdownImageAnalyze*                  *MarkdownImageAnalyze*
+分析当前目录下的 Markdown 文件，显示图片引用情况。
+
+语法:
+    :MarkdownImageAnalyze [图片目录]
+
+参数:
+    [图片目录] (string, 可选): 指定图片目录路径，默认使用配置中的目录
+
+示例:
+    :MarkdownImageAnalyze
+    :MarkdownImageAnalyze assets/images
+
+*:MarkdownImageClean*                    *MarkdownImageClean*  
+清理未引用的图片文件。
+
+语法:
+    :MarkdownImageClean [图片目录]
+
+参数:
+    [图片目录] (string, 可选): 指定图片目录路径，默认使用配置中的目录
+
+示例:
+    :MarkdownImageClean
+    :MarkdownImageClean assets/images
+
+==============================================================================
+5. 函数                                  *markdown_image_clean-functions*
+
+*markdown_image_clean.analyze_images()*
+分析图片引用情况并返回结果。
+
+参数:
+    {image_dir} (string|nil): 图片目录路径，可选
+
+返回值:
+    {unused_images} (table): 未使用的图片文件名列表
+    {image_dir} (string): 实际使用的图片目录路径
+
+*markdown_image_clean.clean_images()*
+清理未引用的图片文件。
+
+参数:
+    {image_dir} (string|nil): 图片目录路径，可选
+
+==============================================================================
+6. 键映射                                *markdown_image_clean-keymaps*
+
+默认键映射:
+
+<leader>mia                              *<leader>mia*
+分析 Markdown 文件中的图片引用情况
+
+<leader>mic                              *<leader>mic*  
+清理未引用的图片文件
+
+自定义键映射示例:
+>lua
+    vim.keymap.set('n', '<leader>ia', function()
+      require('markdown_image_clean').analyze_images()
+    end, { desc = '分析图片引用' })
+    
+    vim.keymap.set('n', '<leader>ic', function()
+      require('markdown_image_clean').clean_images()
+    end, { desc = '清理图片' })
+<
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:
